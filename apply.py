@@ -1,7 +1,14 @@
+import hashlib
+import hmac
+import json
 import os
+
+import requests
 
 
 secret = os.environ["HOWGOOD_SECRET"]
+
+endpoint = "https://howgood-apply-api.howgood.workers.dev/apply"
 
 payload = {
     "name": "Kathy Snider",
@@ -18,3 +25,23 @@ payload = {
         "so you're welcome to try it directly."
     ),
 }
+
+body = json.dumps(payload)
+
+signature = hmac.new(
+    secret.encode(),
+    body.encode(),
+    hashlib.sha256,
+).hexdigest()
+
+response = requests.post(
+    endpoint,
+    data=body,
+    headers={
+        "Content-Type": "application/json",
+        "X-HMAC-Signature": signature,
+    },
+)
+
+print(response.status_code)
+print(response.text)
