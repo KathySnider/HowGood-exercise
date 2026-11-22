@@ -1,2 +1,2 @@
 # HowGood-exercise
-Code and README for submitting HowGood resume
+Code and README for HowGood
